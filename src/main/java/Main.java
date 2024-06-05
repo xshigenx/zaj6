@@ -14,10 +14,13 @@ Poniższe zadania będą się sprowadzały do modyfikacji bazowego kodu. Proces 
 
 import java.io.IOException;
 import java.util.Scanner;
+import java.text.SimpleDateFormat; 
+import java.text.ParseException;
 
 
 class WrongStudentName extends Exception { }
 class WrongStudentAge extends Exception { }
+class WrongDateOfBirth extends Exception { }
 
 class Main {
     public static Scanner scan = new Scanner(System.in);
@@ -38,7 +41,9 @@ class Main {
                 System.out.println("Błędne imie studenta!");
             } catch (WrongStudentAge e) {
                 System.out.println("Błędny wiek studenta!");
-        }
+        }catch (WrongDateOfBirth e) {
+                System.out.println("Błędna data urodzenia!");
+            }
     }
     }
 
@@ -67,11 +72,22 @@ class Main {
         if (age < 0 || age > 100) throw new WrongStudentAge();
         return ageStr;
     }
-    public static void exercise1() throws IOException, WrongStudentName, WrongStudentAge {
+    public static String ReadDateOfBirth() throws WrongDateOfBirth {
+        System.out.println("Podaj datę urodzenia (DD-MM-YYYY): ");
+        String dateStr = scan.nextLine();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        sdf.setLenient(false);
+        try {
+            sdf.parse(dateStr);
+        } catch (ParseException e) {
+            throw new WrongDateOfBirth();
+        }
+        return dateStr;
+    }
+    public static void exercise1() throws IOException, WrongStudentName, WrongStudentAge, WrongDateOfBirth {
         var name = ReadName();
         String age = ReadAge();
-        System.out.println("Podaj datę urodzenia DD-MM-YYY");
-        var date = scan.nextLine();
+        String date = ReadDateOfBirth();
         (new Service()).addStudent(new Student(name, Integer.parseInt(age), date));
     }
 
