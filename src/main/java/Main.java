@@ -21,6 +21,7 @@ import java.text.ParseException;
 class WrongStudentName extends Exception { }
 class WrongStudentAge extends Exception { }
 class WrongDateOfBirth extends Exception { }
+class WrongNumber extends Exception { }
 
 class Main {
     public static Scanner scan = new Scanner(System.in);
@@ -35,6 +36,9 @@ class Main {
                     case 3: exercise3(); break;
                     default: return;
                 }
+            } catch (WrongNumber ex) {
+                    System.out.println("Niepoprawna wartość, spróbuj ponownie.");
+                    scan.nextLine(); 
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (WrongStudentName e) {
@@ -47,13 +51,17 @@ class Main {
     }
     }
 
-    public static int menu() {
+    public static int menu() throws WrongNumber {
         System.out.println("Wciśnij:");
         System.out.println("1 - aby dodać studenta");
         System.out.println("2 - aby wypisać wszystkich studentów");
         System.out.println("3 - aby wyszukać studenta po imieniu");
         System.out.println("0 - aby wyjść z programu");
-        return scan.nextInt();
+           int c = scan.nextInt();
+           if (c < 0 || c > 3) {
+               throw new WrongNumber();
+           }
+           return c;
     }
 
     public static String ReadName() throws WrongStudentName {
